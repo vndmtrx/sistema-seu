@@ -1,0 +1,53 @@
+// Use DBML to define your database structure
+// Docs: https://www.dbml.org/docs
+// https://dbdiagram.io
+
+Table diarios {
+  id integer [PK]
+  curso varchar
+  turma varchar
+  componente varchar
+  turno varchar
+  periodo varchar
+  criado_em timestamp
+}
+
+Table alunos {
+  id integer [PK]
+  matricula varchar
+  nome varchar
+  criado_em timestamp
+}
+
+Table alunos_diarios {
+  id integer [PK]
+  fk_aluno integer [ref: > alunos.id]
+  fk_diario integer [ref: > diarios.id]
+  criado_em timestamp
+}
+
+Table encontros {
+  id integer [PK]
+  fk_diario integer [ref: > diarios.id]
+  data datetime
+  resumo_aula varchar
+}
+
+Table presencas {
+  id integer [PK]
+  fk_alunos_diarios int [ref: > alunos_diarios.id]
+  fk_encontro int [ref: > encontros.id]
+}
+
+Table avaliacoes {
+  id integer [PK]
+  avaliacao varchar
+  tipo_avaliacao tipos_avaliacao
+  fk_encontro int [ref: > encontros.id]
+  fk_alunos_diarios int [ref: > alunos_diarios.id]
+}
+
+Enum tipos_avaliacao {
+  nota
+  conceito
+}

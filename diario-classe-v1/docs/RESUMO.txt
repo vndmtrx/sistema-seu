@@ -1,0 +1,79 @@
+# Diário de Classe V1
+
+Resumo
+- deve conter nomes dos alunos;
+- deve conter matrícula dos alunos;
+- deve conter um número de identificação do aluno na classe;
+- deve conter frequência dos alunos para cada aula;
+- deve conter resumo de cada aula;
+- deve conter as avaliações dos alunos;
+- avaliações podem ser por nota (quantitativa) ou por conceito (qualitativa);
+
+Detalhamento
+- 1 diário pode ter vários alunos
+- 1 aluno pode estar em vários diários de classe
+- 1 diário pode conter vários encontros
+- 1 encontro está ligado somente a 1 diário
+- 1 encontro deve conter os registros dos alunos presentes
+- 1 encontro não deve conter alunos que não estão no diário
+- 1 diário pode conter várias avaliações
+- 1 avaliação está ligada somente a 1 diário
+- 1 avaliação deve conter as nossas dos alunos presentes
+- 1 avaliação não deve conter alunos que não estão no diário
+
+// Use DBML to define your database structure
+// Docs: https://www.dbml.org/docs
+// https://dbdiagram.io
+
+Table diarios {
+  id integer [PK]
+  curso varchar
+  turma varchar
+  componente varchar
+  turno varchar
+  periodo varchar
+  criado_em timestamp
+}
+
+Table alunos {
+  id integer [PK]
+  matricula varchar
+  nome varchar
+  criado_em timestamp
+}
+
+Table alunos_diarios {
+  id integer [PK]
+  fk_diario integer [ref: > diarios.id]
+  fk_aluno integer [ref: > alunos.id]
+  criado_em timestamp
+}
+
+Table encontros {
+  id integer [PK]
+  fk_diario integer [ref: > diarios.id]
+  data datetime
+  resumo_aula varchar
+}
+
+Table presencas {
+  id integer [PK]
+  fk_encontro int [ref: > encontros.id]
+  fk_alunos_diarios int [ref: > alunos_diarios.id]
+}
+
+Table avaliacoes {
+  id integer [PK]
+  avaliacao varchar
+  tipo_avaliacao tipos_avaliacao
+  fk_encontro int [ref: > encontros.id]
+  fk_alunos_diarios int [ref: > alunos_diarios.id]
+}
+
+Enum tipos_avaliacao {
+  nota
+  conceito
+}
+
+
+

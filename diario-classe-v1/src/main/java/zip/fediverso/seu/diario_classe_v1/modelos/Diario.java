@@ -32,7 +32,7 @@ public class Diario extends EntidadeBaseAbstrata {
     private String periodo;
 
     @OneToMany(mappedBy = "diario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Inscricao> inscricoes = new HashSet<>();
+    private Set<Vinculo> vinculos = new HashSet<>();
 
     @OneToMany(mappedBy = "diario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Encontro> encontros = new HashSet<>();

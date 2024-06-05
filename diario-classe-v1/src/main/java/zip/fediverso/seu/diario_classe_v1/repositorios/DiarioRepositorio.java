@@ -12,5 +12,5 @@ import zip.fediverso.seu.diario_classe_v1.modelos.Diario;
 public interface DiarioRepositorio extends JpaRepository<Diario, Long> {
 
     // Consulta para encontrar diários associados a um aluno específico
-    List<Diario> findDiariosByInscricoesAluno(Aluno aluno);
+    List<Diario> findByVinculosAluno(Aluno aluno);
 }

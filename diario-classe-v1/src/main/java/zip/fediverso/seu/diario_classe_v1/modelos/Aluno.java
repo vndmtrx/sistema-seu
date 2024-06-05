@@ -23,5 +23,5 @@ public class Aluno extends EntidadeBaseAbstrata {
     private String nome;
 
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Inscricao> inscricoes = new HashSet<>();
+    private Set<Vinculo> vinculos = new HashSet<>();
 }

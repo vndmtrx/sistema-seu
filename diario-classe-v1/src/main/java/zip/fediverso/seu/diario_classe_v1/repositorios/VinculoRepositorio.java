@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import zip.fediverso.seu.diario_classe_v1.modelos.Vinculo;
 
 @Repository
-public interface InscricaoRepositorio extends JpaRepository<Vinculo, Long> {
+public interface VinculoRepositorio extends JpaRepository<Vinculo, Long> {
     
 }
 

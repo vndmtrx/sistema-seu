@@ -10,10 +10,20 @@ import org.springframework.stereotype.Repository;
 import zip.fediverso.seu.diario_classe_v1.modelos.Diario;
 import zip.fediverso.seu.diario_classe_v1.modelos.Encontro;
 
+/**
+ * Repositório para a entidade Encontro.
+ * <p>
+ * Fornece métodos para interagir com os dados de encontros no banco de dados.
+ */
 @Repository
 public interface EncontroRepositorio extends JpaRepository<Encontro, Long> {
     
-    // Consulta para encontrar encontros associados a um diário específico
+    /**
+     * Consulta para encontrar encontros associados a um diário específico.
+     *
+     * @param diario O diário para o qual os encontros devem ser encontrados.
+     * @return Lista de encontros associados ao diário especificado.
+     */
     @Query("SELECT e FROM Encontro AS e WHERE e.diario = :diario")
     List<Encontro> buscaEncontrosPorDiario(@Param("diario") Diario diario);
 }

@@ -9,8 +9,8 @@ import zip.fediverso.seu.diario_classe_v1.modelos.enums.TipoAvaliacao;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@AttributeOverride(name = "id", column = @Column(name = "id_frequencia"))
-@Table(name="frequencias", uniqueConstraints = {
+@AttributeOverride(name = "id", column = @Column(name = "id_avaliacao"))
+@Table(name="avaliacoes", uniqueConstraints = {
     @UniqueConstraint(name = "AlunoEncontroAvaliacaoUnico", columnNames = {"aluno_id", "encontro_id", "tipo_avaliacao"})
 })
 public class Avaliacao extends EntidadeBaseAbstrata {

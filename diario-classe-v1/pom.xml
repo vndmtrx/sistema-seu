@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>zip.fediverso.seu</groupId>
 	<artifactId>diario-classe-v1</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>diario-classe-v1</name>
 	<description>Primeiro projeto do Sistema SEU, com a criação de um simples diário de classe, sem login e sem autenticação.</description>
 	<properties>
@@ -96,6 +96,9 @@
 				<configuration>
 					<show>private</show>
 					<nohelp>true</nohelp>
+					<encoding>UTF-8</encoding>
+					<additionalparam>-locale pt_BR</additionalparam>
+					<overview>src/main/resources/overview.html</overview>
 				</configuration>
 			</plugin>
 		</plugins>

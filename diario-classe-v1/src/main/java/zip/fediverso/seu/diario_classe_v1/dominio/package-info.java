@@ -1,7 +1,7 @@
 /**
- * Pacote do sistema de diário de classe (diario-classe-v1).
+ * Pacote das entidades do sistema de diário de classe (diario-classe-v1).
  * <p>
- * Este pacote contém as classes principais e entidades do sistema de diário de classe, incluindo:
+ * Este pacote contém as principais entidades do sistema de diário de classe, incluindo:
  * </p>
  * <ul>
  *     <li>{@link zip.fediverso.seu.diario_classe_v1.dominio.Aluno} - Representa um aluno no sistema.</li>

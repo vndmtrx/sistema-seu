@@ -95,9 +95,12 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<show>private</show>
+					<notree>true</notree>
 					<nohelp>true</nohelp>
+					<noindex>true</noindex>
 					<encoding>UTF-8</encoding>
-					<additionalparam>-locale pt_BR</additionalparam>
+					<locale>pt_BR</locale>
+					<doctitle>${project.name} versão ${project.version}</doctitle>
 					<overview>src/main/resources/overview.html</overview>
 				</configuration>
 			</plugin>

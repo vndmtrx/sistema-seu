@@ -25,5 +25,5 @@ public interface DiarioRepositorio extends JpaRepository<Diario, Long> {
      * @return Lista de diários associados ao aluno especificado.
      */
     @Query("SELECT d FROM Diario AS d JOIN d.vinculos AS v WHERE v.aluno = :aluno")
-    List<Diario> buscaDiariosPorAluno(@Param("aluno") Aluno aluno);
+    List<Diario> buscaPorAluno(@Param("aluno") Aluno aluno);
 }

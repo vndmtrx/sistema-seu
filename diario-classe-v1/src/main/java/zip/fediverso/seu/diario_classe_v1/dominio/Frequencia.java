@@ -1,11 +1,11 @@
-package zip.fediverso.seu.diario_classe_v1.modelos;
+package zip.fediverso.seu.diario_classe_v1.dominio;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import zip.fediverso.seu.diario_classe_v1.modelos.base.EntidadeBaseAbstrata;
-import zip.fediverso.seu.diario_classe_v1.modelos.enums.TipoFrequencia;
+import zip.fediverso.seu.diario_classe_v1.dominio.base.EntidadeBaseAbstrata;
+import zip.fediverso.seu.diario_classe_v1.dominio.enums.TipoFrequencia;
 
 /**
  * Representa uma frequência no sistema.

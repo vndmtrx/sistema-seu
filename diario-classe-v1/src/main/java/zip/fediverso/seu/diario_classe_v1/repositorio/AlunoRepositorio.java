@@ -1,4 +1,4 @@
-package zip.fediverso.seu.diario_classe_v1.repositorios;
+package zip.fediverso.seu.diario_classe_v1.repositorio;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import zip.fediverso.seu.diario_classe_v1.modelos.Aluno;
-import zip.fediverso.seu.diario_classe_v1.modelos.Diario;
+import zip.fediverso.seu.diario_classe_v1.dominio.Aluno;
+import zip.fediverso.seu.diario_classe_v1.dominio.Diario;
 
 /**
  * Repositório para a entidade Aluno.

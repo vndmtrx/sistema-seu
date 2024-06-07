@@ -1,4 +1,4 @@
-package zip.fediverso.seu.diario_classe_v1.modelos.enums;
+package zip.fediverso.seu.diario_classe_v1.dominio.enums;
 
 /**
  * Enumeração que representa os diferentes tipos de avaliação no sistema.

@@ -1,4 +1,4 @@
-package zip.fediverso.seu.diario_classe_v1.repositorios;
+package zip.fediverso.seu.diario_classe_v1.repositorio;
 
 import java.util.List;
 
@@ -7,10 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import zip.fediverso.seu.diario_classe_v1.modelos.Aluno;
-import zip.fediverso.seu.diario_classe_v1.modelos.Encontro;
-import zip.fediverso.seu.diario_classe_v1.modelos.Frequencia;
-import zip.fediverso.seu.diario_classe_v1.modelos.enums.TipoFrequencia;
+import zip.fediverso.seu.diario_classe_v1.dominio.Aluno;
+import zip.fediverso.seu.diario_classe_v1.dominio.Encontro;
+import zip.fediverso.seu.diario_classe_v1.dominio.Frequencia;
+import zip.fediverso.seu.diario_classe_v1.dominio.enums.TipoFrequencia;
 
 /**
  * Repositório para a entidade Frequencia.

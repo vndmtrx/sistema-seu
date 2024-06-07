@@ -1,9 +1,9 @@
-package zip.fediverso.seu.diario_classe_v1.repositorios;
+package zip.fediverso.seu.diario_classe_v1.repositorio;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import zip.fediverso.seu.diario_classe_v1.modelos.Vinculo;
+import zip.fediverso.seu.diario_classe_v1.dominio.Vinculo;
 
 /**
  * Repositório para a entidade Vinculo.

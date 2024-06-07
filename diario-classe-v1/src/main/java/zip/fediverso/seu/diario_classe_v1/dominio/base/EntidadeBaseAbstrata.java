@@ -1,4 +1,4 @@
-package zip.fediverso.seu.diario_classe_v1.modelos.base;
+package zip.fediverso.seu.diario_classe_v1.dominio.base;
 
 import java.io.Serializable;
 import java.sql.Timestamp;

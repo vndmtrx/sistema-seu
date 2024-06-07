@@ -1,4 +1,4 @@
-package zip.fediverso.seu.diario_classe_v1.modelos;
+package zip.fediverso.seu.diario_classe_v1.dominio;
 
 import java.util.Date;
 
@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import zip.fediverso.seu.diario_classe_v1.modelos.base.EntidadeBaseAbstrata;
+import zip.fediverso.seu.diario_classe_v1.dominio.base.EntidadeBaseAbstrata;
 
 /**
  * Representa um encontro no sistema.

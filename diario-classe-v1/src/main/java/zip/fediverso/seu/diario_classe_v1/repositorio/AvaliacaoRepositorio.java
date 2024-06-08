@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import zip.fediverso.seu.diario_classe_v1.dominio.Aluno;
 import zip.fediverso.seu.diario_classe_v1.dominio.Avaliacao;
 import zip.fediverso.seu.diario_classe_v1.dominio.Encontro;
-import zip.fediverso.seu.diario_classe_v1.dominio.enums.TipoAvaliacao;
+import zip.fediverso.seu.diario_classe_v1.dominio.enums.TipoAvaliacaoEnum;
 
 /**
  * Repositório para a entidade Avaliacao.
@@ -37,7 +37,7 @@ public interface AvaliacaoRepositorio extends JpaRepository<Avaliacao, Long> {
      * @return Lista de avaliações associadas ao encontro e tipo especificados.
      */
     @Query("SELECT a FROM Avaliacao AS a WHERE a.encontro = :encontro AND a.tipoAvaliacao = :tipo")
-    List<Avaliacao> buscaPorEncontroETipoAvaliacao(@Param("encontro") Encontro encontro, @Param("tipo") TipoAvaliacao tipo);
+    List<Avaliacao> buscaPorEncontroETipoAvaliacao(@Param("encontro") Encontro encontro, @Param("tipo") TipoAvaliacaoEnum tipo);
 
     /**
      * Consulta para encontrar avaliações associadas a um aluno específico.
@@ -56,5 +56,5 @@ public interface AvaliacaoRepositorio extends JpaRepository<Avaliacao, Long> {
      * @return Lista de avaliações associadas ao aluno e tipo especificados.
      */
     @Query("SELECT a FROM Avaliacao AS a WHERE a.aluno = :aluno AND a.tipoAvaliacao = :tipo")
-    List<Avaliacao> buscaPorAlunoETipoAvaliacao(@Param("aluno") Aluno aluno, @Param("tipo") TipoAvaliacao tipo);
+    List<Avaliacao> buscaPorAlunoETipoAvaliacao(@Param("aluno") Aluno aluno, @Param("tipo") TipoAvaliacaoEnum tipo);
 }

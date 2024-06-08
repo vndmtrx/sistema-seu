@@ -1,6 +1,7 @@
 package zip.fediverso.seu.diario_classe_v1.repositorio;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +27,13 @@ public interface AlunoRepositorio extends JpaRepository<Aluno, Long> {
      */
     @Query("SELECT a FROM Aluno AS a JOIN a.vinculos AS v WHERE v.diario = :diario")
     List<Aluno> buscaAlunosPorDiario(@Param("diario") Diario diario);
+
+    /**
+     * Busca um aluno pela sua matrícula.
+     *
+     * @param matricula A matrícula do aluno.
+     * @return Um Optional contendo o aluno, se encontrado.
+     */
+    @Query("SELECT a FROM Aluno AS a WHERE a.matricula = :matricula")
+    Optional<Aluno> buscaPorMatricula(@Param("matricula") String matricula);
 }

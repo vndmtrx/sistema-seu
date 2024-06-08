@@ -21,7 +21,7 @@ package zip.fediverso.seu.diario_classe_v1.dominio.enums;
  *     <li>{@code AVALIACAO_PARES}: Avaliação realizada pelos colegas, onde os alunos avaliam uns aos outros.</li>
  * </ul>
  */
-public enum TipoAvaliacao {
+public enum TipoAvaliacaoEnum {
     /**
      * Avaliação tradicional que testa o conhecimento do aluno em uma matéria específica.
      */

@@ -10,7 +10,7 @@ package zip.fediverso.seu.diario_classe_v1.dominio.enums;
  *     <li>{@code JUSTIFICATIVA}: Ausência justificada do aluno no encontro.</li>
  * </ul>
  */
-public enum TipoFrequencia {
+public enum TipoFrequenciaEnum {
     /**
      * Presença do aluno no encontro.
      */

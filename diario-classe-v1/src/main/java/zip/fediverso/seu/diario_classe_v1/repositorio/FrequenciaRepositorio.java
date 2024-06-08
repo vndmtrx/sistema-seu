@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import zip.fediverso.seu.diario_classe_v1.dominio.Aluno;
 import zip.fediverso.seu.diario_classe_v1.dominio.Encontro;
 import zip.fediverso.seu.diario_classe_v1.dominio.Frequencia;
-import zip.fediverso.seu.diario_classe_v1.dominio.enums.TipoFrequencia;
+import zip.fediverso.seu.diario_classe_v1.dominio.enums.TipoFrequenciaEnum;
 
 /**
  * Repositório para a entidade Frequencia.
@@ -37,7 +37,7 @@ public interface FrequenciaRepositorio extends JpaRepository<Frequencia, Long> {
      * @return Lista de frequências associadas ao encontro e tipo especificados.
      */
     @Query("SELECT f FROM Frequencia AS f WHERE f.encontro = :encontro AND f.tipoFrequencia = :tipo")
-    List<Frequencia> buscaPorEncontroETipoFrequencia(@Param("encontro") Encontro encontro, @Param("tipo") TipoFrequencia tipo);
+    List<Frequencia> buscaPorEncontroETipoFrequencia(@Param("encontro") Encontro encontro, @Param("tipo") TipoFrequenciaEnum tipo);
 
     /**
      * Consulta para encontrar frequências associadas a um aluno específico.
@@ -56,6 +56,6 @@ public interface FrequenciaRepositorio extends JpaRepository<Frequencia, Long> {
      * @return Lista de frequências associadas ao aluno e tipo especificados.
      */
     @Query("SELECT f FROM Frequencia AS f WHERE f.aluno = :aluno AND f.tipoFrequencia = :tipo")
-    List<Frequencia> buscaPorAlunoETipoFrequencia(@Param("aluno") Aluno aluno, @Param("tipo") TipoFrequencia tipo);
+    List<Frequencia> buscaPorAlunoETipoFrequencia(@Param("aluno") Aluno aluno, @Param("tipo") TipoFrequenciaEnum tipo);
 }
 

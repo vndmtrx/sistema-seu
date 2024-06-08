@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import zip.fediverso.seu.diario_classe_v1.dominio.base.EntidadeBaseAbstrata;
-import zip.fediverso.seu.diario_classe_v1.dominio.enums.TipoFrequencia;
+import zip.fediverso.seu.diario_classe_v1.dominio.enums.TipoFrequenciaEnum;
 
 /**
  * Representa uma frequência no sistema.
@@ -72,7 +72,7 @@ public class Frequencia extends EntidadeBaseAbstrata {
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_frequencia", nullable = false)
-    private TipoFrequencia tipoFrequencia;
+    private TipoFrequenciaEnum tipoFrequencia;
 
     /**
      * Comentário adicional sobre a frequência. Máximo de 100 caracteres.

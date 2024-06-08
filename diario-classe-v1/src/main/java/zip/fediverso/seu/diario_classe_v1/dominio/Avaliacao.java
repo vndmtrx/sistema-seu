@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import zip.fediverso.seu.diario_classe_v1.dominio.base.EntidadeBaseAbstrata;
-import zip.fediverso.seu.diario_classe_v1.dominio.enums.TipoAvaliacao;
+import zip.fediverso.seu.diario_classe_v1.dominio.enums.TipoAvaliacaoEnum;
 
 /**
  * Representa uma avaliação no sistema.
@@ -64,7 +64,7 @@ public class Avaliacao extends EntidadeBaseAbstrata {
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_avaliacao", nullable = false)
-    private TipoAvaliacao tipoAvaliacao;
+    private TipoAvaliacaoEnum tipoAvaliacao;
 
     /**
      * Critério utilizado na avaliação. Máximo de 5 caracteres.

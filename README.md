@@ -18,7 +18,7 @@ A evolução do Sistema SEU é documentada de forma didática, permitindo que se
 ## Tecnologias Utilizadas
 
 - Java 22
-- Spring Boot 3.3.0
+- Spring Boot 3.3.1
 - Spring Data JPA
 - Spring Boot Actuator
 - Spring Boot DevTools

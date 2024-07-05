@@ -2,61 +2,66 @@ package zip.fediverso.seu.diario_classe_v1.servico;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import zip.fediverso.seu.diario_classe_v1.dominio.Aluno;
-import zip.fediverso.seu.diario_classe_v1.repositorio.AlunoRepositorio;
-import zip.fediverso.seu.diario_classe_v1.servico.dto.AlunoDto;
+import zip.fediverso.seu.diario_classe_v1.negocio.aluno.*;
+import zip.fediverso.seu.diario_classe_v1.utils.negocio.UUIDv7;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@ActiveProfiles("test")
+@ComponentScan(basePackages = "zip.fediverso.seu.diario_classe_v1")
 class AlunoServicoTests {
 
-    @Mock
+    @SpyBean
     private AlunoRepositorio alunoRepositorio;
 
-    @InjectMocks
+    @Autowired
+    private AlunoMapper alunoMapper;
+
+    @Autowired
     private AlunoServico alunoServico;
+
+    private AlunoDto alunoDto1;
+    private AlunoDto alunoRepetidoDto;
+    private AlunoDto alunoDto2;
+
+    private UUID uuid1;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        uuid1 = UUIDv7.randomUUID();
+
+        alunoDto1 = AlunoDto.builder().matricula("20210001").nome("João Silva").build();
+        alunoRepetidoDto = AlunoDto.builder().matricula("20210001").nome("Jorge Amado").build();
+        alunoDto2 = AlunoDto.builder().matricula("20210002").nome("Maria Oliveira").build();
     }
 
     @Test
     void testObterTodosAlunos() {
-        Aluno aluno1 = new Aluno();
-        aluno1.setMatricula("20210001");
-        aluno1.setNome("João Silva");
-        
-        Aluno aluno2 = new Aluno();
-        aluno2.setMatricula("20210002");
-        aluno2.setNome("Maria Oliveira");
-        
-        when(alunoRepositorio.findAll()).thenReturn(Arrays.asList(aluno1, aluno2));
-        
+        alunoRepositorio.saveAndFlush(alunoMapper.paraEntidade(alunoDto1));
+        alunoRepositorio.saveAndFlush(alunoMapper.paraEntidade(alunoDto2));
+
         List<AlunoDto> alunos = alunoServico.obterTodosAlunos();
-        
+
         assertEquals(2, alunos.size());
         assertEquals("20210001", alunos.get(0).getMatricula());
         assertEquals("João Silva", alunos.get(0).getNome());
@@ -66,101 +71,216 @@ class AlunoServicoTests {
 
     @Test
     void testObterAlunoPorId() {
-        Aluno aluno = new Aluno();
-        aluno.setId(1L);
-        aluno.setMatricula("20210001");
-        aluno.setNome("João Silva");
+        AlunoDto alunoSalvoDto = alunoServico.criarAluno(alunoDto1);
+
+        AlunoDto resultado = alunoServico.obterAlunoPorId(alunoSalvoDto.getId());
         
-        when(alunoRepositorio.findById(1L)).thenReturn(Optional.of(aluno));
+        assertNotNull(resultado);
+        assertEquals("20210001", resultado.getMatricula());
+        assertEquals("João Silva", resultado.getNome());
+    }
+
+    @Test
+    void testObterAlunoIdNaoExiste() {
+        Exception excecao = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.obterAlunoPorId(uuid1);
+        });
+
+        assertEquals("Aluno não existe.", excecao.getMessage());
+    }
+
+    @Test
+    void testObterAlunoPorMatricula() {
+        alunoServico.criarAluno(alunoDto1);
         
-        AlunoDto alunoDTO = alunoServico.obterAlunoPorId(1L);
-        
-        assertNotNull(alunoDTO);
-        assertEquals("20210001", alunoDTO.getMatricula());
-        assertEquals("João Silva", alunoDTO.getNome());
+        AlunoDto resultado = alunoServico.obterAlunoPorMatricula(alunoDto1.getMatricula());
+
+        assertNotNull(resultado);
+        assertEquals("20210001", resultado.getMatricula());
+        assertEquals("João Silva", resultado.getNome());
+    }
+
+    @Test
+    void testObterAlunoMatriculaNaoExiste() {
+        alunoServico.criarAluno(alunoDto1);
+                    
+        Exception excecao = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.obterAlunoPorMatricula(alunoDto2.getMatricula());
+        });
+
+        assertEquals("Matrícula não existe.", excecao.getMessage());
+    }
+
+    @Test
+    void testAlunoDtoNull() {
+        Exception excecao1 = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.criarAluno(null);
+        });
+
+        assertEquals("AlunoDto não pode ser NULL.", excecao1.getMessage());
+
+        Exception excecao2 = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.atualizarAluno(null);
+        });
+
+        assertEquals("AlunoDto não pode ser NULL.", excecao2.getMessage());
+
+        Exception excecao3 = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.deletarAluno(null);
+        });
+
+        assertEquals("AlunoDto não pode ser NULL.", excecao3.getMessage());
     }
 
     @Test
     void testCriarAluno() {
-        AlunoDto alunoDTO = new AlunoDto();
-        alunoDTO.setMatricula("20210001");
-        alunoDTO.setNome("João Silva");
-        
-        Aluno aluno = new Aluno();
-        aluno.setMatricula("20210001");
-        aluno.setNome("João Silva");
-        
-        when(alunoRepositorio.saveAndFlush(any(Aluno.class))).thenReturn(aluno);
-        
-        AlunoDto criado = alunoServico.criarAluno(alunoDTO);
-        
-        assertNotNull(criado);
-        assertEquals("20210001", criado.getMatricula());
-        assertEquals("João Silva", criado.getNome());
+        AlunoDto alunoSalvoDto = alunoServico.criarAluno(alunoDto1);
+
+        assertNotNull(alunoSalvoDto);
+        assertEquals("20210001", alunoSalvoDto.getMatricula());
+        assertEquals("João Silva", alunoSalvoDto.getNome());
+    }
+
+    @Test
+    void testCriarAlunoIdJaExiste() {
+        AlunoDto alunoSalvoDto = alunoServico.criarAluno(alunoDto1);
+
+        Exception excecao = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.criarAluno(alunoSalvoDto);
+        });
+
+        assertEquals(String.format("Aluno já existe. ID: %s", alunoSalvoDto.getId()), excecao.getMessage());
+    }
+
+    @Test
+    void testCriarAlunoIdNaoExiste() {
+        alunoDto1.setId(uuid1);
+
+        Exception excecao = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.criarAluno(alunoDto1);
+        });
+
+        assertEquals("Aluno não deve conter Id no ato de criação, pois este valor é gerado automaticamente.", excecao.getMessage());
+    }
+
+    @Test
+    void testCriarAlunoMesmaMatricula() {
+        alunoServico.criarAluno(alunoDto1);
+
+        Exception excecao = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.criarAluno(alunoRepetidoDto);
+        });
+
+        assertEquals(String.format("Matrícula já existe: %s", alunoDto1.getMatricula()), excecao.getMessage());
     }
 
     @Test
     void testAtualizarAluno() {
-        AlunoDto alunoDTO = new AlunoDto();
-        alunoDTO.setMatricula("20210001");
-        alunoDTO.setNome("João Silva Atualizado");
+        AlunoDto alunoSalvoDto = alunoServico.criarAluno(alunoDto1);
 
-        Aluno aluno = new Aluno();
-        aluno.setId(1L);
-        aluno.setMatricula("20210001");
-        aluno.setNome("João Silva");
+        alunoSalvoDto.setNome("João Silva Atualizado");
 
-        Aluno alunoAtualizado = new Aluno();
-        alunoAtualizado.setId(1L);
-        alunoAtualizado.setMatricula("20210001");
-        alunoAtualizado.setNome("João Silva Atualizado");
+        AlunoDto atualizado = alunoServico.atualizarAluno(alunoSalvoDto);
 
-        when(alunoRepositorio.existsById(1L)).thenReturn(true);
-        when(alunoRepositorio.saveAndFlush(any(Aluno.class))).thenReturn(alunoAtualizado);
-        
-        AlunoDto atualizado = alunoServico.atualizarAluno(1L, alunoDTO);
-        
         assertNotNull(atualizado);
         assertEquals("20210001", atualizado.getMatricula());
         assertEquals("João Silva Atualizado", atualizado.getNome());
     }
 
     @Test
-    void testAtualizarAlunoNaoExistente() {
-        AlunoDto alunoDTO = new AlunoDto();
-        alunoDTO.setMatricula("20210001");
-        alunoDTO.setNome("João Silva Atualizado");
+    void testAtualizarAlunoSemId() {
+        alunoServico.criarAluno(alunoDto1); // Necessário para criação das tabelas
 
-        when(alunoRepositorio.existsById(1L)).thenReturn(false);
+        Exception excecao = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.atualizarAluno(alunoDto2);
+        });
 
-        AlunoDto atualizado = alunoServico.atualizarAluno(1L, alunoDTO);
+        assertEquals("Não é possível atualizar sem Id do Aluno.", excecao.getMessage());
+    }
 
-        assertNull(atualizado);
-        verify(alunoRepositorio, never()).saveAndFlush(any(Aluno.class));
+    @Test
+    void testAtualizarAlunoNaoExiste() {
+        alunoServico.criarAluno(alunoDto1);
+
+        alunoDto2.setId(uuid1);
+
+        Exception excecao = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.atualizarAluno(alunoDto2);
+        });
+
+        assertEquals("Aluno não existe.", excecao.getMessage());
+    }
+
+    @Test
+    void testAtualizarAlunoMesmaMatricula() {
+        AlunoDto alunoSalvoDto1 = alunoServico.criarAluno(alunoDto1);
+        AlunoDto alunoSalvoDto2 = alunoServico.criarAluno(alunoDto2);
+        
+        alunoSalvoDto2.setMatricula(alunoSalvoDto1.getMatricula());
+
+        Exception excecao = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.atualizarAluno(alunoSalvoDto2);
+        });
+
+        assertEquals(String.format("Matrícula já existe: %s", alunoDto1.getMatricula()), excecao.getMessage());
     }
 
     @Test
     void testDeletarAluno() {
-        doNothing().when(alunoRepositorio).deleteById(1L);
+        AlunoDto alunoSalvoDto1 = alunoServico.criarAluno(alunoDto1);
+
+        alunoServico.deletarAluno(alunoSalvoDto1);
         
-        alunoServico.deletarAluno(1L);
-        
-        verify(alunoRepositorio, times(1)).deleteById(1L);
+        Exception excecao = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.obterAlunoPorId(alunoSalvoDto1.getId());
+        });
+
+        assertEquals("Aluno não existe.", excecao.getMessage());
     }
 
     @Test
-    void testObterAlunoPorMatricula() {
-        Aluno aluno = new Aluno();
-        aluno.setId(1L);
-        aluno.setMatricula("20210001");
-        aluno.setNome("João Silva");
+    void testDeletarAlunoSemId() {
+        Exception excecao = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.deletarAluno(alunoDto1);
+        });
 
-        when(alunoRepositorio.buscaPorMatricula("20210001")).thenReturn(Optional.of(aluno));
+        assertEquals("Não é possível deletar sem Id do Aluno.", excecao.getMessage());
+    }
+
+    @Test
+    void testDeletarAlunoNaoExiste() {
+        alunoDto1.setId(uuid1);
+
+        Exception excecao = assertThrows(AlunoExcecao.class, () -> {
+            alunoServico.deletarAluno(alunoDto1);
+        });
+
+        assertEquals("Aluno não existe.", excecao.getMessage());
+    }
+
+    @Test
+    void testCriarAlunoGeraJpaSystemExceptionGenerica() {
+        doThrow(new JpaSystemException(new RuntimeException("Erro genérico do JPA")))
+                .when(alunoRepositorio).saveAndFlush(any(AlunoEntidade.class));
+
+        JpaSystemException exception = assertThrows(JpaSystemException.class, () -> {
+            alunoServico.criarAluno(alunoDto1);
+        });
+
+        assertTrue(exception.getMessage().contains("Erro genérico do JPA"));
+    }
+
+    @Test
+    void testAlterarAlunoGeraJpaSystemExceptionGenerica() {
+        AlunoDto alunoSalvoDto1 = alunoServico.criarAluno(alunoDto1);
         
-        AlunoDto alunoDTO = alunoServico.obterAlunoPorMatricula("20210001");
+        doThrow(new JpaSystemException(new RuntimeException("Erro genérico do JPA")))
+                .when(alunoRepositorio).saveAndFlush(any(AlunoEntidade.class));
 
-        assertNotNull(alunoDTO);
-        assertEquals("20210001", alunoDTO.getMatricula());
-        assertEquals("João Silva", alunoDTO.getNome());
+        JpaSystemException exception = assertThrows(JpaSystemException.class, () -> {
+            alunoServico.atualizarAluno(alunoSalvoDto1);
+        });
+
+        assertTrue(exception.getMessage().contains("Erro genérico do JPA"));
     }
 }

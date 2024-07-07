@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html th:replace="~{base :: layout}">
+<section th:fragment="conteudo">
+    <div class="container mt-5">
+        <h2>Detalhes do Aluno</h2>
+        <dl class="row">
+            <dt class="col-sm-3">Matrícula</dt>
+            <dd class="col-sm-9" th:text="${aluno.matricula}">Matrícula</dd>
+
+            <dt class="col-sm-3">Nome</dt>
+            <dd class="col-sm-9" th:text="${aluno.nome}">Nome</dd>
+        </dl>
+        <div class="mt-3">
+            <a class="btn btn-secondary" data-bs-toggle="collapse" href="#debugAccordion" role="button" aria-expanded="false" aria-controls="debugAccordion">
+                Debug
+            </a>
+            <div class="collapse mt-3" id="debugAccordion">
+                <dl class="row">
+                    <dt class="col-sm-3">ID</dt>
+                    <dd class="col-sm-9" th:text="${aluno.id}">ID</dd>
+
+                    <dt class="col-sm-3">Criado Em</dt>
+                    <dd class="col-sm-9" th:text="${aluno.criadoEm}">Criado Em</dd>
+
+                    <dt class="col-sm-3">Alterado Em</dt>
+                    <dd class="col-sm-9" th:text="${aluno.alteradoEm}">Alterado Em</dd>
+
+                    <dt class="col-sm-3">Versão</dt>
+                    <dd class="col-sm-9" th:text="${aluno.versao}">Versão</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="mt-3">
+            <a th:href="@{'/alunos/editar/' + ${aluno.id} + '?referer=detalhes'}" class="btn btn-primary">Editar</a>
+            <a href="/alunos" class="btn btn-secondary">Voltar</a>
+        </div>
+    </div>
+</section>
+</html>

@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -27,42 +28,67 @@ public class AlunoController {
     public String listarAlunos(Model model) {
         List<AlunoDto> alunos = alunoServico.obterTodosAlunos();
         model.addAttribute("alunos", alunos);
-        return "alunos/lista";
+        return "negocio/alunos/lista";
     }
 
     @GetMapping("/novo")
     public String exibirFormularioDeCriacao(Model model) {
         model.addAttribute("aluno", new AlunoDto());
-        return "alunos/formulario";
+        return "negocio/alunos/formulario";
     }
 
     @PostMapping
-    public String criarAluno(@Valid @ModelAttribute("alunoDto") AlunoDto alunoDto, Model model) {
+        public String criarAluno(@Valid @ModelAttribute("aluno") AlunoDto alunoDto, BindingResult br, Model model) {
+        if (br.hasErrors()) {
+            model.addAttribute("aluno", alunoDto);
+            return "negocio/alunos/formulario";
+        }
+
         try {
             alunoServico.criarAluno(alunoDto);
             return "redirect:/alunos";
         } catch (AlunoExcecao e) {
             model.addAttribute("aluno", alunoDto);
             model.addAttribute("erro", e.getMessage());
-            return "alunos/formulario";
+            return "negocio/aluno/formulario";
         }
     }
 
     @GetMapping("/editar/{id}")
-    public String exibirFormularioDeEdicao(@PathVariable UUID id, Model model) {
+    public String exibirFormularioDeEdicao(@PathVariable UUID id, @RequestParam(name = "referer", required = false) String referer, Model model) {
         AlunoDto aluno = alunoServico.obterAlunoPorId(id);
         model.addAttribute("aluno", aluno);
-        return "alunos/formulario";
+        model.addAttribute("referer", referer);
+        return "negocio/alunos/formulario";
     }
 
     @PostMapping("/editar")
-    public String atualizarAluno(@ModelAttribute AlunoDto alunoDto, Model model) {
-        AlunoDto alunoAtualizado = alunoServico.atualizarAluno(alunoDto);
-        if (alunoAtualizado == null) {
-            model.addAttribute("erro", "Aluno não encontrado.");
-            return "alunos/formulario";
+    public String atualizarAluno(@Valid @ModelAttribute("aluno") AlunoDto alunoDto, BindingResult br, @RequestParam(name = "referer", required = false) String referer, Model model) {
+        if (br.hasErrors()) {
+            model.addAttribute("aluno", alunoDto);
+            model.addAttribute("referer", referer);
+            return "negocio/alunos/formulario";
         }
-        return "redirect:/alunos";
+
+        try {
+            alunoServico.atualizarAluno(alunoDto);
+            if ("detalhes".equals(referer)) {
+                return "redirect:/alunos/detalhes/" + alunoDto.getId();
+            }
+            return "redirect:/alunos";
+        } catch (AlunoExcecao e) {
+            model.addAttribute("aluno", alunoDto);
+            model.addAttribute("erro", e.getMessage());
+            model.addAttribute("referer", referer);
+            return "negocio/alunos/formulario";
+        }
+    }
+
+    @GetMapping("/detalhes/{id}")
+    public String exibirDetalhesDoAluno(@PathVariable UUID id, Model model) {
+        AlunoDto aluno = alunoServico.obterAlunoPorId(id);
+        model.addAttribute("aluno", aluno);
+        return "negocio/alunos/detalhes";
     }
 
     @GetMapping("/remover/{id}")

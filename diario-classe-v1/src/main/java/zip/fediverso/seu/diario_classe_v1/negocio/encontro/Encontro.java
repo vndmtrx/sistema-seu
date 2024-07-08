@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import zip.fediverso.seu.diario_classe_v1.negocio.diario.Diario;
+import zip.fediverso.seu.diario_classe_v1.negocio.diario.DiarioEntidade;
 import zip.fediverso.seu.diario_classe_v1.utils.negocio.EntidadeBaseAbstrata;
 
 /**
@@ -52,7 +52,7 @@ public class Encontro extends EntidadeBaseAbstrata {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diario_id", nullable = false)
-    private Diario diario;
+    private DiarioEntidade diario;
 
     /**
      * Data do encontro.

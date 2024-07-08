@@ -16,7 +16,7 @@ import zip.fediverso.seu.diario_classe_v1.negocio.aluno.AlunoEntidade;
  * Fornece métodos para interagir com os dados de diários no banco de dados.
  */
 @Repository
-public interface DiarioRepositorio extends JpaRepository<Diario, UUID> {
+public interface DiarioRepositorio extends JpaRepository<DiarioEntidade, UUID> {
 
     /**
      * Consulta para encontrar diários associados a um aluno específico.
@@ -24,6 +24,6 @@ public interface DiarioRepositorio extends JpaRepository<Diario, UUID> {
      * @param aluno O aluno para o qual os diários devem ser encontrados.
      * @return Lista de diários associados ao aluno especificado.
      */
-    @Query("SELECT d FROM Diario AS d JOIN d.vinculos AS v WHERE v.aluno = :aluno")
-    List<Diario> buscaPorAluno(@Param("aluno") AlunoEntidade aluno);
+    @Query("SELECT d FROM DiarioEntidade AS d JOIN d.vinculos AS v WHERE v.aluno = :aluno")
+    List<DiarioEntidade> buscaPorAluno(@Param("aluno") AlunoEntidade aluno);
 }

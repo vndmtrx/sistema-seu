@@ -43,7 +43,7 @@ import zip.fediverso.seu.diario_classe_v1.utils.negocio.EntidadeBaseAbstrata;
 @Entity
 @AttributeOverride(name = "id", column = @Column(name = "id_diario"))
 @Table(name="diarios")
-public class Diario extends EntidadeBaseAbstrata {
+public class DiarioEntidade extends EntidadeBaseAbstrata {
     /**
      * Identificador universal para a serialização da classe.
      * <p>

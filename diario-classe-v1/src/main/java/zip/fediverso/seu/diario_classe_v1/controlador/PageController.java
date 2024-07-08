@@ -16,10 +16,4 @@ public class PageController {
         model.addAttribute("message", "Bem-vindo ao Diário de Classe!");
         return "index";
     }
-
-    @GetMapping("/exemplo")
-    public String exemplo(Model model) {
-        model.addAttribute("message", "Página exemplo.");
-        return "index";
-    }
 }

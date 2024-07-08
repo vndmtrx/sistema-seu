@@ -50,7 +50,7 @@ public class AlunoController {
         } catch (AlunoExcecao e) {
             model.addAttribute("aluno", alunoDto);
             model.addAttribute("erro", e.getMessage());
-            return "negocio/aluno/formulario";
+            return "negocio/alunos/formulario";
         }
     }
 

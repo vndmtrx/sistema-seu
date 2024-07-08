@@ -16,4 +16,3 @@ public class AlunoExcecao extends RuntimeException {
         super(mensagem, causa);
     }
 }
-

@@ -6,14 +6,11 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import jakarta.annotation.Generated;
-
-@Generated("Jacoco")
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
-    private zip.fediverso.seu.diario_classe_v1.utils.interceptor.PageInterceptor pageInterceptor;
+    private zip.fediverso.seu.diario_classe_v1.utils.config.PageInterceptor pageInterceptor;
 
     @Override
     public void addInterceptors(@NonNull InterceptorRegistry registry) {

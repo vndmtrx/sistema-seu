@@ -25,10 +25,23 @@ public class AlunoController {
     private AlunoServico alunoServico;
 
     @GetMapping
-    public String listarAlunos(Model model) {
-        List<AlunoDto> alunos = alunoServico.obterTodosAlunos();
+    public String listarAlunos(@RequestParam(name = "ativos", required = false) Boolean ativos, Model model) {
+        List<AlunoDto> alunos;
+        if (ativos != null && ativos) {
+            alunos = alunoServico.obterTodosAlunosAtivos();
+        } else {
+            alunos = alunoServico.obterTodosAlunos();
+        }
         model.addAttribute("alunos", alunos);
+        model.addAttribute("exibirAtivos", ativos != null && ativos);
         return "negocio/alunos/lista";
+    }
+
+    @GetMapping("/ativos")
+    public String listarAlunosAtivos(Model model) {
+        List<AlunoDto> alunos = alunoServico.obterTodosAlunosAtivos();
+        model.addAttribute("alunos", alunos);
+        return "negocio/alunos/ativos";
     }
 
     @GetMapping("/novo")

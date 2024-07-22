@@ -50,6 +50,7 @@ public class AlunoControllerTest {
         alunoDto.setId(UUID.randomUUID());
         alunoDto.setMatricula("123456");
         alunoDto.setNome("Teste Aluno");
+        alunoDto.setStatus(Boolean.TRUE);
     }
 
     @Test
@@ -63,9 +64,54 @@ public class AlunoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("negocio/alunos/lista"))
                 .andExpect(model().attributeExists("alunos"))
-                .andExpect(model().attribute("alunos", alunos));
+                .andExpect(model().attribute("alunos", alunos))
+                .andExpect(model().attribute("exibirAtivos", false));
     }
 
+    @Test
+    public void testListarAlunosComAtivosTrue() throws Exception {
+        List<AlunoDto> alunosAtivos = new ArrayList<>();
+        alunosAtivos.add(alunoDto);
+
+        when(alunoServico.obterTodosAlunosAtivos()).thenReturn(alunosAtivos);
+
+        mockMvc.perform(get("/alunos").param("ativos", "true"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("negocio/alunos/lista"))
+                .andExpect(model().attributeExists("alunos"))
+                .andExpect(model().attribute("alunos", alunosAtivos))
+                .andExpect(model().attribute("exibirAtivos", true));
+    }
+
+    @Test
+    public void testListarAlunosComAtivosFalse() throws Exception {
+        List<AlunoDto> alunos = new ArrayList<>();
+        alunos.add(alunoDto);
+
+        when(alunoServico.obterTodosAlunos()).thenReturn(alunos);
+
+        mockMvc.perform(get("/alunos").param("ativos", "false"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("negocio/alunos/lista"))
+                .andExpect(model().attributeExists("alunos"))
+                .andExpect(model().attribute("alunos", alunos))
+                .andExpect(model().attribute("exibirAtivos", false));
+    }
+
+    @Test
+    public void testListarAlunosAtivosSeparado() throws Exception {
+        List<AlunoDto> alunosAtivos = new ArrayList<>();
+        alunosAtivos.add(alunoDto);
+
+        when(alunoServico.obterTodosAlunosAtivos()).thenReturn(alunosAtivos);
+
+        mockMvc.perform(get("/alunos/ativos"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("negocio/alunos/ativos"))
+                .andExpect(model().attributeExists("alunos"))
+                .andExpect(model().attribute("alunos", alunosAtivos));
+    }
+    
     @Test
     public void testExibirFormularioDeCriacao() throws Exception {
         mockMvc.perform(get("/alunos/novo"))
@@ -103,7 +149,8 @@ public class AlunoControllerTest {
         mockMvc.perform(post("/alunos")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("matricula", "123456")
-                .param("nome", "Teste Aluno"))
+                .param("nome", "Teste Aluno")
+                .param("status", "true"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("negocio/alunos/formulario"))
                 .andExpect(model().attributeExists("erro"))
@@ -118,7 +165,8 @@ public class AlunoControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", alunoDto.getId().toString())
                 .param("matricula", "123456")
-                .param("nome", "Teste Aluno"))
+                .param("nome", "Teste Aluno")
+                .param("status", "true"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("negocio/alunos/formulario"))
                 .andExpect(model().attributeExists("erro"))
@@ -132,7 +180,8 @@ public class AlunoControllerTest {
         mockMvc.perform(post("/alunos")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("matricula", "123456")
-                .param("nome", "Teste Aluno"))
+                .param("nome", "Teste Aluno")
+                .param("status", "true"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("/alunos*"));
     }
@@ -144,7 +193,8 @@ public class AlunoControllerTest {
         mockMvc.perform(post("/alunos")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("matricula", "")
-                .param("nome", ""))
+                .param("nome", "")
+                .param("status", "true"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("negocio/alunos/formulario"));
     }
@@ -157,7 +207,8 @@ public class AlunoControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", alunoDto.getId().toString())
                 .param("matricula", "123456")
-                .param("nome", "Teste Aluno"))
+                .param("nome", "Teste Aluno")
+                .param("status", "true"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("/alunos*"));
     }
@@ -170,7 +221,8 @@ public class AlunoControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", alunoDto.getId().toString())
                 .param("matricula", "")
-                .param("nome", ""))
+                .param("nome", "")
+                .param("status", "true"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("negocio/alunos/formulario"));
     }
@@ -179,16 +231,17 @@ public class AlunoControllerTest {
     public void testAtualizarAlunoRedirecionaParaDetalhes() throws Exception {
         String referer = "detalhes";
         when(alunoServico.atualizarAluno(any(AlunoDto.class))).thenReturn(alunoDto);
-    
+
         mockMvc.perform(post("/alunos/editar")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", alunoDto.getId().toString())
                 .param("matricula", "123456")
                 .param("nome", "Teste Aluno")
+                .param("status", "true")
                 .param("referer", referer))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("/alunos/detalhes/*"));
-    }    
+    }
 
     @Test
     public void testRemoverAluno() throws Exception {

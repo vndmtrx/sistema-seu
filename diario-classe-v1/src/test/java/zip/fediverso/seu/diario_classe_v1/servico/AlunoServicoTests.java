@@ -50,9 +50,9 @@ class AlunoServicoTests {
     void setUp() {
         uuid1 = UUIDv7.randomUUID();
 
-        alunoDto1 = AlunoDto.builder().matricula("20210001").nome("João Silva").build();
-        alunoRepetidoDto = AlunoDto.builder().matricula("20210001").nome("Jorge Amado").build();
-        alunoDto2 = AlunoDto.builder().matricula("20210002").nome("Maria Oliveira").build();
+        alunoDto1 = AlunoDto.builder().matricula("20210001").nome("João Silva").status(Boolean.TRUE).build();
+        alunoRepetidoDto = AlunoDto.builder().matricula("20210001").nome("Jorge Amado").status(Boolean.TRUE).build();
+        alunoDto2 = AlunoDto.builder().matricula("20210002").nome("Maria Oliveira").status(Boolean.TRUE).build();
     }
 
     @Test
@@ -67,6 +67,23 @@ class AlunoServicoTests {
         assertEquals("João Silva", alunos.get(0).getNome());
         assertEquals("20210002", alunos.get(1).getMatricula());
         assertEquals("Maria Oliveira", alunos.get(1).getNome());
+    }
+
+    @Test
+    void testObterTodosAlunosAtivos() {
+        AlunoEntidade aluno1 = alunoMapper.paraEntidade(alunoDto1);
+        aluno1.setStatus(Boolean.TRUE);
+        alunoRepositorio.saveAndFlush(aluno1);
+
+        AlunoEntidade aluno2 = alunoMapper.paraEntidade(alunoDto2);
+        aluno2.setStatus(Boolean.FALSE);
+        alunoRepositorio.saveAndFlush(aluno2);
+
+        List<AlunoDto> alunosAtivos = alunoServico.obterTodosAlunosAtivos();
+
+        assertEquals(1, alunosAtivos.size());
+        assertEquals("20210001", alunosAtivos.get(0).getMatricula());
+        assertEquals("João Silva", alunosAtivos.get(0).getNome());
     }
 
     @Test

@@ -61,6 +61,12 @@ public class AlunoEntidade extends EntidadeBaseAbstrata {
     private String nome;
 
     /**
+     * Status do aluno. Não pode ser nulo.
+     */
+    @Column(nullable = false)
+    private Boolean status;
+
+    /**
      * Vínculos associados ao aluno.
      */
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

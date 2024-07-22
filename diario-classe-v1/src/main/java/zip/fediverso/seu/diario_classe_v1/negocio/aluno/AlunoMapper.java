@@ -21,6 +21,7 @@ public interface AlunoMapper {
     @Mapping(source = "aluno.versao", target = "versao")
     @Mapping(source = "aluno.matricula", target = "matricula")
     @Mapping(source = "aluno.nome", target = "nome")
+    @Mapping(source = "aluno.status", target = "status")
     AlunoDto paraDto(AlunoEntidade aluno);
 
     /**
@@ -35,6 +36,7 @@ public interface AlunoMapper {
     @Mapping(source = "versao", target = "versao")
     @Mapping(source = "matricula", target = "matricula")
     @Mapping(source = "nome", target = "nome")
+    @Mapping(source = "status", target = "status")
     @Mapping(target = "vinculos", ignore = true)
     AlunoEntidade paraEntidade(AlunoDto alunoDto);
 }

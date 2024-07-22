@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,4 +30,7 @@ public class AlunoDto {
     @NotEmpty(message = "O nome não pode estar vazio")
     @Size(min = 2, max = 60, message = "O nome deve ter entre 2 e 60 caracteres")
     private String nome;
+
+    @NotNull(message = "O status não pode ser nulo")
+    private Boolean status;
 }

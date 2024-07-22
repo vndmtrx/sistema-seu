@@ -1,5 +1,6 @@
 package zip.fediverso.seu.diario_classe_v1.negocio.aluno;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,4 +25,12 @@ public interface AlunoRepositorio extends JpaRepository<AlunoEntidade, UUID> {
      */
     @Query("SELECT a FROM AlunoEntidade AS a WHERE a.matricula = :matricula")
     Optional<AlunoEntidade> buscaPorMatricula(@Param("matricula") String matricula);
+
+    /**
+     * Busca todos os alunos com status ativo.
+     *
+     * @return Uma lista de alunos com status ativo.
+     */
+    @Query("SELECT a FROM AlunoEntidade AS a WHERE a.status = true")
+    List<AlunoEntidade> buscaPorStatusAtivo();
 }

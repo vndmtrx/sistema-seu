@@ -37,13 +37,6 @@ public class AlunoController {
         return "negocio/alunos/lista";
     }
 
-    @GetMapping("/ativos")
-    public String listarAlunosAtivos(Model model) {
-        List<AlunoDto> alunos = alunoServico.obterTodosAlunosAtivos();
-        model.addAttribute("alunos", alunos);
-        return "negocio/alunos/ativos";
-    }
-
     @GetMapping("/novo")
     public String exibirFormularioDeCriacao(Model model) {
         model.addAttribute("aluno", new AlunoDto());

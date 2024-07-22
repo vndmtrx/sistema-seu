@@ -50,6 +50,17 @@ public class AlunoServico {
     }
 
     /**
+     * Obtém todos os alunos ativos do sistema.
+     * 
+     * @return Lista de AlunoDto representando todos os alunos ativos.
+     */
+    @Transactional(readOnly = true)
+    public List<AlunoDto> obterTodosAlunosAtivos() {
+        List<AlunoEntidade> alunosAtivos = alunoRepositorio.buscaPorStatusAtivo();
+        return alunosAtivos.stream().map(alunoMapper::paraDto).collect(Collectors.toList());
+    }
+
+    /**
      * Obtém um aluno pelo seu ID.
      * 
      * @param id Identificador do aluno.
@@ -137,6 +148,7 @@ public class AlunoServico {
             AlunoEntidade aluno = alunoExistente.get();
             aluno.setMatricula(alunoDto.getMatricula());
             aluno.setNome(alunoDto.getNome());
+            aluno.setStatus(alunoDto.getStatus());
 
             aluno = alunoRepositorio.saveAndFlush(aluno);
             return alunoMapper.paraDto(aluno);

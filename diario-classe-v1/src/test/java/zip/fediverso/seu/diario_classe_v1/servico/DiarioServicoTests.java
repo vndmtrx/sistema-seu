@@ -41,7 +41,6 @@ class DiarioServicoTests {
     private DiarioServico diarioServico;
 
     private DiarioDto diarioDto1;
-    private DiarioDto diarioRepetidoDto;
     private DiarioDto diarioDto2;
 
     private UUID uuid1;
@@ -51,7 +50,6 @@ class DiarioServicoTests {
         uuid1 = UUIDv7.randomUUID();
 
         diarioDto1 = DiarioDto.builder().curso("Matemática").turma("A").componente("Álgebra").turno("Matutino").periodo("2021/1").build();
-        diarioRepetidoDto = DiarioDto.builder().curso("Matemática").turma("A").componente("Álgebra").turno("Matutino").periodo("2021/1").build();
         diarioDto2 = DiarioDto.builder().curso("Física").turma("B").componente("Mecânica").turno("Vespertino").periodo("2021/2").build();
     }
 

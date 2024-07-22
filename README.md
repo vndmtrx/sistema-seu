@@ -18,7 +18,7 @@ A evolução do Sistema SEU é documentada de forma didática, permitindo que se
 ## Tecnologias Utilizadas
 
 - Java 22
-- Spring Boot 3.3.1
+- Spring Boot 3.3.2
 - Spring Data JPA
 - Spring Boot Actuator
 - Spring Boot DevTools
@@ -47,8 +47,8 @@ A evolução do Sistema SEU é documentada de forma didática, permitindo que se
    ```bash
    sdk install java 22-tem
    sdk default java 22-tem
-   sdk install maven 3.9.7
-   sdk default maven 3.9.7
+   sdk install maven 3.9.8
+   sdk default maven 3.9.8
    ```
 
 3. **Verificar a instalação**
@@ -80,7 +80,41 @@ Para iniciar a aplicação, utilize o Maven:
 mvn spring-boot:run
 ```
 
-A aplicação estará disponível em `http://localhost:8080`.
+A aplicação estará disponível em `http://localhost:9001`.
+
+### Build e Execução com Docker
+
+Para construir e executar a aplicação usando Docker, siga os passos abaixo:
+
+1. **Entre na pasta do Projeto**
+
+Você deve primeiro entrar em um dos projetos em desenvolvimento nesse repositório. Atualmente são os seguintes:
+
+- diario-classe-v1
+
+2. **Construir a imagem Docker**
+
+Execute o comando abaixo para construir a imagem Docker da aplicação:
+
+```bash
+docker build -t PROJETO
+```
+
+3. **Executar a imagem Docker**
+
+Execute o comando abaixo para rodar a imagem Docker construída:
+
+```bash
+docker run --rm -p 9001:9001 PROJETO
+```
+
+## Nota sobre o Banco de Dados
+
+Atualmente, todos os projetos estão sendo escritos utilizando o SQLite embarcado diretamente no contêiner Docker. Isso significa que o arquivo do banco de dados SQLite está incluído na imagem Docker e, portanto, não é persistido entre execuções consecutivas do contêiner. Toda vez que o contêiner é parado e reiniciado, qualquer dado salvo no banco de dados será perdido e o banco será recriado do zero.
+
+Essa abordagem é prática para desenvolvimento e testes locais, pois permite que o ambiente seja rapidamente configurado e executado sem a necessidade de dependências externas adicionais. No entanto, para ambientes de produção, esta configuração não é ideal devido à falta de persistência dos dados.
+
+Futuras Melhorias: No futuro, planejamos alterar a arquitetura para utilizar um banco de dados externo, como PostgreSQL e/ou MySQL, o que permitirá a persistência dos dados entre execuções do contêiner e melhorará a robustez e a escalabilidade do sistema.
 
 ## Contribuindo
 

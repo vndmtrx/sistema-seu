@@ -10,7 +10,7 @@
     </parent>
     <groupId>zip.fediverso.seu</groupId>
     <artifactId>diario-classe-v1</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <name>diario-classe-v1</name>
     <description>Primeiro projeto do Sistema SEU, com a criação de um simples diário de classe, sem login e sem autenticação.</description>
     <properties>
@@ -27,6 +27,8 @@
         <lombok.version>1.18.34</lombok.version>
         <mockito.version>5.12.0</mockito.version>
         <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <maven-javadoc-plugin.version>3.8.0</maven-javadoc-plugin.version>
     </properties>
@@ -168,6 +170,7 @@
     </dependencies>
 
     <build>
+        <finalName>app-deployment</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -185,6 +188,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>default-compile</id>
@@ -193,6 +197,8 @@
                             <goal>compile</goal>
                         </goals>
                         <configuration>
+                            <source>${java.version}</source>
+                            <target>${java.version}</target>
                             <annotationProcessorPaths>
                                 <path>
                                     <groupId>org.projectlombok</groupId>
@@ -229,6 +235,12 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
             </plugin>
 
             <plugin>

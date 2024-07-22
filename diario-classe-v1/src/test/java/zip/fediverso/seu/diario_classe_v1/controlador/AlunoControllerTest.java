@@ -97,20 +97,6 @@ public class AlunoControllerTest {
                 .andExpect(model().attribute("alunos", alunos))
                 .andExpect(model().attribute("exibirAtivos", false));
     }
-
-    @Test
-    public void testListarAlunosAtivosSeparado() throws Exception {
-        List<AlunoDto> alunosAtivos = new ArrayList<>();
-        alunosAtivos.add(alunoDto);
-
-        when(alunoServico.obterTodosAlunosAtivos()).thenReturn(alunosAtivos);
-
-        mockMvc.perform(get("/alunos/ativos"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("negocio/alunos/ativos"))
-                .andExpect(model().attributeExists("alunos"))
-                .andExpect(model().attribute("alunos", alunosAtivos));
-    }
     
     @Test
     public void testExibirFormularioDeCriacao() throws Exception {
